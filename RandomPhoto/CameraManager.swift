@@ -90,8 +90,8 @@ class CameraManager: NSObject {
             session.commitConfiguration()
           }
         let device = AVCaptureDevice.default(
-          .builtInDualWideCamera,
-          for: .video,
+            .builtInTrueDepthCamera,
+            for: .depthData,
           position: .unspecified)
         
         // Capture depth data
@@ -142,7 +142,7 @@ class CameraManager: NSObject {
           let videoConnection = videoOutput.connection(with: .video)
             
             videoConnection?.videoOrientation = .portrait
-            videoConnection?.isVideoMirrored = true
+            videoConnection?.isVideoMirrored = false
         } else {
           // 4
           set(error: .cannotAddOutput)
@@ -160,6 +160,9 @@ class CameraManager: NSObject {
     }
     func capture() {
         // Set photo settings
+        guard status != .failed else {
+            return
+        }
         let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
         
         photoSettings.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
