@@ -7,17 +7,37 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @StateObject private var model = ContentViewModel()
-
-    var body: some View {
-        
-        Text("Atos Camera").bold()
-        FrameView(image: model.frame)
-            .edgesIgnoringSafeArea(.all)
-        Button("Photo"){
-            CameraManager.shared.capture()
+enum Route {
+    case guide
+    case camera
+}
+struct Navigator{
+    static func navigate<T: View>(_ route: Route, content: () -> T) -> AnyView{
+        switch route{
+        case .guide:
+            return AnyView(NavigationLink(destination: GuideView()){
+                content()
+            })
+        case .camera:
+            return AnyView(NavigationLink(destination: TakePictureView()){
+                content()
+            })
         }
+        
+    }
+}
+struct ContentView: View {
+    
+    
+    var body: some View {
+        NavigationView{
+            Button(action: {}, label: {
+                Navigator.navigate(.camera){
+                    Text("Go to camera")
+                }
+            })
+        }
+       
     }
     
 }

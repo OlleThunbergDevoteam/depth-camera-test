@@ -5,9 +5,11 @@ class ContentViewModel: ObservableObject {
   @Published var frame: CGImage?
   // 2
   private let frameManager = FrameManager.shared
+  private let isFirstLaunch = !isAppAlreadyLaunchedOnce()
 
   init() {
     setupSubscriptions()
+    print(isFirstLaunch)
   }
   // 3
   func setupSubscriptions() {
@@ -22,4 +24,5 @@ class ContentViewModel: ObservableObject {
         // 4
         .assign(to: &$frame)
   }
+
 }

@@ -103,7 +103,18 @@ class CameraManager: NSObject {
         guard session.canAddOutput(photoOutput)
             else { fatalError("Can't add photo output.") }
         
-        
+        //let availableFormats = camera.activeFormat.supportedDepthDataFormats
+        /*
+        let depthFormat = availableFormats.filter { format in
+            let pixelFormatType =
+                CMFormatDescriptionGetMediaSubType(format.formatDescription)
+            
+            return (pixelFormatType == kCVPixelFormatType_DepthFloat16 ||
+                    pixelFormatType == kCVPixelFormatType_DepthFloat32)
+        }.first
+        try!camera.lockForConfiguration()
+        //camera.activeDepthDataFormat = depthFormat
+            */
         do {
           // 1
             let cameraInput = try AVCaptureDeviceInput(device: camera)
