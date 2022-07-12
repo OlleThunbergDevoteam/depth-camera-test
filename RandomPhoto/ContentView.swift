@@ -15,7 +15,7 @@ struct ContentView: View {
         FrameView(image: model.frame)
             .edgesIgnoringSafeArea(.all)
         Button("Photo"){
-            CameraManager.shared.takePhoto()
+            CameraManager.shared.capture()
         }
     }
 }

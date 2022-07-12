@@ -20,6 +20,8 @@ class CameraManager: NSObject {
     private var status = Status.unconfigured
     
     public var photoOutput = AVCapturePhotoOutput()
+    
+    private let cameraDelegate = PhotoCaptureProcessor()
   
     enum Status {
         case unconfigured
@@ -134,6 +136,7 @@ class CameraManager: NSObject {
             session.sessionPreset = .photo
             
             photoOutput.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
+            print(photoOutput.isDepthDataDeliveryEnabled)
 
           // 3
           let videoConnection = videoOutput.connection(with: .video)
@@ -155,21 +158,22 @@ class CameraManager: NSObject {
         self.videoOutput.setSampleBufferDelegate(delegate, queue: queue)
       }
     }
-    
-    func takePhoto(){
-        
-        // Take the photo
-        let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+    func capture() {
+        // Set photo settings
+        let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
         
         photoSettings.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
-        print(photoSettings.isDepthDataDeliveryEnabled)
+        photoSettings.embedsDepthDataInPhoto = true
+        photoSettings.isHighResolutionPhotoEnabled = true
+        photoSettings.flashMode = .auto
         
-        print("Taking photo")
+    
         
-        photoOutput.capturePhoto(with: photoSettings, delegate: PhotoCaptureProcessor())
-        print("We are past capturePhoto")
+        print("isDepthDataDelivery enabled: " + String(photoSettings.isDepthDataDeliveryEnabled))
+        photoOutput.isHighResolutionCaptureEnabled = true
+        photoOutput.capturePhoto(with: photoSettings, delegate: cameraDelegate)
+        
     }
-
 }
 
 
@@ -177,7 +181,40 @@ class PhotoCaptureProcessor: NSObject, AVCapturePhotoCaptureDelegate{
     
     public func photoOutput(_: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         
-        print("This doesn't run :(")
+        guard error == nil else {
+            return
+        }
+        guard let url = URL(string: "http:192.168.86.19:3000/upload/photo")else{
+            return
+        }
+        /*guard let url = URL(string: "https://zypode80n4.execute-api.us-east-1.amazonaws.com/dev/upload")else{
+            return
+        }*/
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body : [String: AnyHashable] = [
+            "imageType": "3D",
+            "userdata": [
+                "location" : "SWE",
+                "device" : "IPHONE13"
+            ],
+            "image": photo.fileDataRepresentation()!.base64EncodedString()
+            
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: .fragmentsAllowed)
+        let task = URLSession.shared.dataTask(with: request){ data, _, _ in
+            guard let data = data else {
+                return
+            }
+            do {
+                let response = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                print("Success \(response)")
+            }catch{
+                print(error)
+            }
+        }
+        task.resume()
         
     }
     
