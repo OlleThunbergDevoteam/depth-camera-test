@@ -11,6 +11,7 @@ struct ContentView: View {
     @StateObject private var model = ContentViewModel()
 
     var body: some View {
+        
         Text("Atos Camera").bold()
         FrameView(image: model.frame)
             .edgesIgnoringSafeArea(.all)
@@ -18,6 +19,7 @@ struct ContentView: View {
             CameraManager.shared.capture()
         }
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

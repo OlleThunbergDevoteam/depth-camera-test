@@ -89,13 +89,12 @@ class CameraManager: NSObject {
           defer {
             session.commitConfiguration()
           }
-        let device = AVCaptureDevice.default(
-            .builtInTrueDepthCamera,
-            for: .depthData,
-          position: .unspecified)
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInLiDARDepthCamera, .builtInDualWideCamera, .builtInTripleCamera, ], mediaType: .depthData, position: .unspecified)
+        let devices = discoverySession.devices
+        print(devices)
         
         // Capture depth data
-        guard let camera = device else {
+        guard let camera = devices.first else {
           set(error: .cameraUnavailable)
           status = .failed
           return
