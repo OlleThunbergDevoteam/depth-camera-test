@@ -29,7 +29,7 @@ struct UploadPictureView: View {
             Text("Please wait while the image is being approved").onAppear{
                 // Upload the photo
                 print("uploading photo")
-                print($photo.wrappedValue)
+                
                 uploadPhoto(photo: $photo.wrappedValue!)
             }
         }else if status == .approved {

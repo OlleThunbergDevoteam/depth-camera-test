@@ -104,7 +104,7 @@ class CameraManager: NSObject {
           defer {
             session.commitConfiguration()
           }
-        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInLiDARDepthCamera, .builtInDualWideCamera, .builtInTripleCamera, ], mediaType: .video, position: .unspecified)
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInLiDARDepthCamera, .builtInDualWideCamera, .builtInTripleCamera, .builtInDualCamera, .builtInWideAngleCamera, .builtInTelephotoCamera ], mediaType: .video, position: .unspecified)
         let devices = discoverySession.devices
         print(devices)
         

@@ -9,12 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct TakePictureView: View {
-    class TakePictureViewModel: ObservableObject {
-        @Published var isActive = false
-        var image: AVCapturePhoto? {
-            didSet { isActive = image != nil }
-        }
-    }
+    
     
     @State private var isActive = false
     

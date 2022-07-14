@@ -16,7 +16,7 @@ struct VideoView: View {
             .edgesIgnoringSafeArea(.all)
     }
     
-    init(parentViewModel: TakePictureView.TakePictureViewModel) {
+    init(parentViewModel: TakePictureViewModel) {
         model = VideoViewModel(parentViewModel: parentViewModel)
         print("Initialize videoview")
     }
