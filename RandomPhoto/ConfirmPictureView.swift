@@ -10,69 +10,34 @@ import AVFoundation
 import SwiftUI
 
 struct ConfirmPictureView: View {
-    @State var previewImage : UIImage
-    private var photo : AVCapturePhoto?
+    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @Binding var photo : AVCapturePhoto?
+    @State var isShowingUploadPictureView = false
     
+    private let label = Text("Preview Image")
     
     var body: some View{
-        Text("Confirm picture")
-        
-            Image(uiImage: previewImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-        
-        
-    }
-    init(_ _photo: AVCapturePhoto?){
-        print("Initialize run")
-        print("IsrawPhoto",photo?.isRawPhoto)
-        guard _photo != nil else {
-            previewImage = UIImage()
-            return
+        NavigationLink(destination: UploadPictureView($photo).navigationBarBackButtonHidden(true), isActive: $isShowingUploadPictureView ){
+            EmptyView()
         }
-        photo = _photo
-        let CGImage = photo!.cgImageRepresentation()
-        
-        let CIImage = CIImage(cgImage: CGImage!)
-        
-        previewImage = UIImage(ciImage: CIImage)
-        // Render the photo to the page.
-    }
-    func uploadPhoto(photo: AVCapturePhoto){
-        /*guard let url = URL(string: "http:192.168.86.19:3000/upload/photo")else{
-            return
-        }*/
-        guard let url = URL(string: "https://zypode80n4.execute-api.us-east-1.amazonaws.com/dev/upload")else{
-            return
+        if($photo.wrappedValue != nil){
+                Image($photo.wrappedValue!.cgImageRepresentation()!, scale: 0.5, orientation: .leftMirrored,label: label)
+                  .resizable()
+                  .padding(20).scaledToFit()
+                Text("Are you happy with your image?")
+            Button("Confirm", action: {
+                // Navigate to to the uploadPictureView
+                isShowingUploadPictureView = true
+            })
+            Button("Take another", action: {
+                self.presentationMode.wrappedValue.dismiss()
+            })
+        }else {
+            ProgressView().progressViewStyle(CircularProgressViewStyle())
         }
-        
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let body : [String: AnyHashable] = [
-            "imageType": "3D",
-            "userdata": [
-                "location" : "SWE",
-                "device" : PhotoCaptureProcessor.deviceType
-            ],
-            "image": "data:image/jpg;base64," + photo.fileDataRepresentation()!.base64EncodedString()
-            
-        ]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: .fragmentsAllowed)
-        let task = URLSession.shared.dataTask(with: request){ data, _, _ in
-            guard let data = data else {
-                return
-            }
-            do {
-                let response = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                print("Success \(response)")
-            }catch{
-                print(error)
-            }
-        }
-        
-        
-        task.resume()
     }
+    init(_ _photo: Binding<AVCapturePhoto?>){
+        self._photo = _photo
+    }
+    
 }

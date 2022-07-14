@@ -10,6 +10,7 @@ import SwiftUI
 struct GuideView: View {
     private var viewModel : ContentViewModel?
     init(model: ContentViewModel){
+        print("Initialize guideview")
         viewModel = model
     }
     var body: some View{

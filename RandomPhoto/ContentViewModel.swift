@@ -6,6 +6,7 @@ class ContentViewModel: ObservableObject {
   
     
   init() {
+      print("Initialize ContentViewModel")
     if(isFirstLaunch) {
         isGuideDone = false
     }

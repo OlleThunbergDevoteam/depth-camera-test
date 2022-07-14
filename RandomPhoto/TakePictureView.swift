@@ -9,29 +9,43 @@ import SwiftUI
 
 
 struct TakePictureView: View {
-    let contentView : ContentView;
+    
+    @State private var isActive = false
     @StateObject var model = TakePictureViewModel()
     @State var isShowingConfirmPhotoView = false
     
-    init(_ _contentView: ContentView){
-        contentView = _contentView
+    init(){
         print("Initialize take picture view")
     }
     
     var body: some View{
-        
-        NavigationLink(destination: ConfirmPictureView($model.takenPhoto.wrappedValue).navigationBarBackButtonHidden(true), isActive: $isShowingConfirmPhotoView ){
-            EmptyView()
-        }
-        
-        FrameView(image: model.frame)
-            .edgesIgnoringSafeArea(.all)
-        Button("Photo"){
-            // When we have taken a picutre, view the picture
-            CameraManager.shared.capture()
-            isShowingConfirmPhotoView = true
+        NavigationView{
+            VStack{
+                FrameView(image: model.frame)
+                    .edgesIgnoringSafeArea(.all)
+                
+                Button("Photo"){
+                    // When we have taken a picutre, view the picture
+                    CameraManager.shared.capture()
+                    isActive = true
+                    
+                }
+                NavigationLink(destination: ConfirmPictureView($model.takenPhoto).navigationBarBackButtonHidden(true), isActive: $isActive ){
+                    EmptyView()
+                }.isDetailLink(false)
+            }
+                
+                /*
+                NavigationLink(destination: ConfirmPictureView(takenPicture), tag: "confirmPicture", selection: $selection) {
+                        EmptyView()
+                }*/
             
-        }
+        }.navigationViewStyle(StackNavigationViewStyle()).environment(\.rootPresentationMode, self.$isActive)
+        /*NavigationLink(destination: ConfirmPictureView($model.takenPhoto).navigationBarBackButtonHidden(true), isActive: $isShowingConfirmPhotoView ){
+            EmptyView()
+        }*/
+        
+        
     }
 }
 
