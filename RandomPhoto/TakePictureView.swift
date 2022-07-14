@@ -6,23 +6,36 @@
 //
 
 import SwiftUI
-
+import AVFoundation
 
 struct TakePictureView: View {
+    class TakePictureViewModel: ObservableObject {
+        @Published var isActive = false
+        var image: AVCapturePhoto? {
+            didSet { isActive = image != nil }
+        }
+    }
     
     @State private var isActive = false
-    @StateObject var model = TakePictureViewModel()
+    
+    @StateObject var viewModel = TakePictureViewModel()
+    
     @State var isShowingConfirmPhotoView = false
+    
+    var image: AVCapturePhoto?
     
     init(){
         print("Initialize take picture view")
+        
     }
+    
+    
     
     var body: some View{
         NavigationView{
             VStack{
-                FrameView(image: model.frame)
-                    .edgesIgnoringSafeArea(.all)
+                
+                VideoView(parentViewModel: viewModel)
                 
                 Button("Photo"){
                     // When we have taken a picutre, view the picture
@@ -30,7 +43,13 @@ struct TakePictureView: View {
                     isActive = true
                     
                 }
-                NavigationLink(destination: ConfirmPictureView($model.takenPhoto).navigationBarBackButtonHidden(true), isActive: $isActive ){
+                .onAppear {
+                    CameraManager.shared.startRunning()
+                }
+                .onDisappear {
+                    CameraManager.shared.stopRunning()
+                }
+                NavigationLink(destination: ConfirmPictureView(photo: $viewModel.image).navigationBarBackButtonHidden(true), isActive: $isActive ){
                     EmptyView()
                 }.isDetailLink(false)
             }

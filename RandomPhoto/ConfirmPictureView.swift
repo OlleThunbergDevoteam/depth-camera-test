@@ -17,7 +17,8 @@ struct ConfirmPictureView: View {
     private let label = Text("Preview Image")
     
     var body: some View{
-        NavigationLink(destination: UploadPictureView($photo).navigationBarBackButtonHidden(true), isActive: $isShowingUploadPictureView ){
+        
+        NavigationLink(destination: UploadPictureView(_photo).navigationBarBackButtonHidden(true), isActive: $isShowingUploadPictureView ){
             EmptyView()
         }
         if($photo.wrappedValue != nil){
@@ -36,8 +37,9 @@ struct ConfirmPictureView: View {
             ProgressView().progressViewStyle(CircularProgressViewStyle())
         }
     }
-    init(_ _photo: Binding<AVCapturePhoto?>){
-        self._photo = _photo
+    init(photo: Binding<AVCapturePhoto?>){
+        self._photo = photo
+        print("INit uploadpictureview")
     }
     
 }

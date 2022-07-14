@@ -24,7 +24,7 @@ class CameraManager: NSObject {
     
     public var deviceType : String?
     
-    public var cameraDelegate : TakePictureViewModel?
+    public var cameraDelegate : VideoViewModel?
     
     public static var deviceType: String?
     
@@ -43,12 +43,20 @@ class CameraManager: NSObject {
         super.init()
         configure()
     }
-  
+    public func stopRunning(){
+        sessionQueue.async {
+            self.session.stopRunning()
+        }
+    }
+    public func startRunning(){
+        sessionQueue.async {
+            self.session.startRunning()
+        }
+    }
     private func configure() {
         checkPermissions()
         sessionQueue.async {
           self.configureCaptureSession()
-          self.session.startRunning()
         }
 
     }
@@ -96,7 +104,7 @@ class CameraManager: NSObject {
           defer {
             session.commitConfiguration()
           }
-        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInLiDARDepthCamera, .builtInDualWideCamera, .builtInTripleCamera, ], mediaType: .depthData, position: .unspecified)
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInLiDARDepthCamera, .builtInDualWideCamera, .builtInTripleCamera, ], mediaType: .video, position: .unspecified)
         let devices = discoverySession.devices
         print(devices)
         
@@ -153,6 +161,8 @@ class CameraManager: NSObject {
             session.sessionPreset = .photo
             
             photoOutput.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
+            PhotoCaptureProcessor.isDepthDataSupported = photoOutput.isDepthDataDeliverySupported
+            
             print(photoOutput.isDepthDataDeliveryEnabled)
 
           // 3
@@ -184,12 +194,8 @@ class CameraManager: NSObject {
         let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
         
         photoSettings.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
-        photoSettings.embedsDepthDataInPhoto = true
         photoSettings.isHighResolutionPhotoEnabled = true
-        photoSettings.flashMode = .auto
-        
-    
-        
+        photoSettings.flashMode = .off
         print("isDepthDataDelivery enabled: " + String(photoSettings.isDepthDataDeliveryEnabled))
         photoOutput.isHighResolutionCaptureEnabled = true
         photoOutput.capturePhoto(with: photoSettings, delegate: cameraDelegate!)

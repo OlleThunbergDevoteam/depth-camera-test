@@ -62,7 +62,8 @@ struct UploadPictureView: View {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let body : [String: AnyHashable] = [
-            "imageType": "3D",
+            "imageType": photo.depthData?.depthDataMap != nil ? "3D" : "2D",
+            "supportsDepthData": PhotoCaptureProcessor.isDepthDataSupported,
             "userdata": [
                 "location" : "SWE",
                 "device" : PhotoCaptureProcessor.deviceType

@@ -4,7 +4,10 @@ import Foundation
 class PhotoCaptureProcessor: NSObject, AVCapturePhotoCaptureDelegate{
     
     public static var deviceType: String?
+    public static var isDepthDataSupported: Bool = false
+    
     public var takenPhoto: AVCapturePhoto?
+    
     override init(){
         if PhotoCaptureProcessor.deviceType == nil {
             PhotoCaptureProcessor.setupDeviceType()
