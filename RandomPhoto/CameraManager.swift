@@ -5,9 +5,10 @@
 //  Created by admin on 2022-07-11.
 //
 import AVFoundation
-
+import SwiftUI
 
 class CameraManager: NSObject {
+    
     
     @Published var error: CameraError?
     
@@ -21,7 +22,13 @@ class CameraManager: NSObject {
     
     public var photoOutput = AVCapturePhotoOutput()
     
-    private let cameraDelegate = PhotoCaptureProcessor()
+    public var deviceType : String?
+    
+    public var cameraDelegate : TakePictureViewModel?
+    
+    public static var deviceType: String?
+    
+    public var selectionBinding : Binding<String?>?
   
     enum Status {
         case unconfigured
@@ -173,6 +180,7 @@ class CameraManager: NSObject {
         guard status != .failed else {
             return
         }
+        
         let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
         
         photoSettings.isDepthDataDeliveryEnabled = photoOutput.isDepthDataDeliverySupported
@@ -184,51 +192,27 @@ class CameraManager: NSObject {
         
         print("isDepthDataDelivery enabled: " + String(photoSettings.isDepthDataDeliveryEnabled))
         photoOutput.isHighResolutionCaptureEnabled = true
-        photoOutput.capturePhoto(with: photoSettings, delegate: cameraDelegate)
+        photoOutput.capturePhoto(with: photoSettings, delegate: cameraDelegate!)
+        
+    }
+    
+    
+    
+    static func setupDeviceType(){
+        // Update the device type on the photoCaptureProcessor class
+        PhotoCaptureProcessor.deviceType = {
+            var utsnameInstance = utsname()
+            uname(&utsnameInstance)
+            let optionalString: String? = withUnsafePointer(to: &utsnameInstance.machine) {
+                $0.withMemoryRebound(to: CChar.self, capacity: 1) {
+                    ptr in String.init(validatingUTF8: ptr)
+                }
+            }
+            return optionalString ?? "N/A"
+    }()
+        
         
     }
 }
 
 
-class PhotoCaptureProcessor: NSObject, AVCapturePhotoCaptureDelegate{
-    
-    public func photoOutput(_: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        
-        guard error == nil else {
-            return
-        }
-        guard let url = URL(string: "http:192.168.86.19:3000/upload/photo")else{
-            return
-        }
-        /*guard let url = URL(string: "https://zypode80n4.execute-api.us-east-1.amazonaws.com/dev/upload")else{
-            return
-        }*/
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let body : [String: AnyHashable] = [
-            "imageType": "3D",
-            "userdata": [
-                "location" : "SWE",
-                "device" : "IPHONE13"
-            ],
-            "image": photo.fileDataRepresentation()!.base64EncodedString()
-            
-        ]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: .fragmentsAllowed)
-        let task = URLSession.shared.dataTask(with: request){ data, _, _ in
-            guard let data = data else {
-                return
-            }
-            do {
-                let response = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                print("Success \(response)")
-            }catch{
-                print(error)
-            }
-        }
-        task.resume()
-        
-    }
-    
-}

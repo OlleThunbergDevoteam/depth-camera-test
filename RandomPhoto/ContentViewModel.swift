@@ -1,28 +1,15 @@
 import CoreImage
 
 class ContentViewModel: ObservableObject {
-  // 1
-  @Published var frame: CGImage?
-  // 2
-  private let frameManager = FrameManager.shared
-  private let isFirstLaunch = !isAppAlreadyLaunchedOnce()
-
+  private var isFirstLaunch = !isAppAlreadyLaunchedOnce()
+  @Published var isGuideDone = true
+  
+    
   init() {
-    setupSubscriptions()
-    print(isFirstLaunch)
-  }
-  // 3
-  func setupSubscriptions() {
-      // 1
-      frameManager.$current
-        // 2
-        .receive(on: RunLoop.main)
-        // 3
-        .compactMap { buffer in
-          return CGImage.create(from: buffer)
-        }
-        // 4
-        .assign(to: &$frame)
+    if(isFirstLaunch) {
+        isGuideDone = false
+    }
+    
   }
 
 }

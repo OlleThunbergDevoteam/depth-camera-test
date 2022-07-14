@@ -9,13 +9,28 @@ import SwiftUI
 
 
 struct TakePictureView: View {
-    @StateObject private var model = ContentViewModel()
+    let contentView : ContentView;
+    @StateObject var model = TakePictureViewModel()
+    @State var isShowingConfirmPhotoView = false
+    
+    init(_ _contentView: ContentView){
+        contentView = _contentView
+        print("Initialize take picture view")
+    }
+    
     var body: some View{
-        Text("Atos Camera").bold()
+        
+        NavigationLink(destination: ConfirmPictureView($model.takenPhoto.wrappedValue).navigationBarBackButtonHidden(true), isActive: $isShowingConfirmPhotoView ){
+            EmptyView()
+        }
+        
         FrameView(image: model.frame)
             .edgesIgnoringSafeArea(.all)
         Button("Photo"){
+            // When we have taken a picutre, view the picture
             CameraManager.shared.capture()
+            isShowingConfirmPhotoView = true
+            
         }
     }
 }
