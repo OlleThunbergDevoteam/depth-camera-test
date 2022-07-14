@@ -18,6 +18,9 @@ struct UploadPictureView: View {
     @Environment(\.rootPresentationMode) private var rootPresentationMode
     
     @State var status : Status = .uploading
+    @State var statusMessage : String?
+    @State var statusCode : NSNumber? 
+    
     @Binding var photo: AVCapturePhoto?
     
     init(_ _photo: Binding<AVCapturePhoto?>){
@@ -33,12 +36,12 @@ struct UploadPictureView: View {
                 uploadPhoto(photo: $photo.wrappedValue!)
             }
         }else if status == .approved {
-            Text("Your image has been approved")
+            Text(statusMessage ?? "Your image has been approved")
             Button("Close", action: {
                 self.rootPresentationMode.wrappedValue.dismiss()
             })
         }else if status == .rejected {
-            Text("Please retake the image.")
+            Text(statusMessage ?? "Please retake the image")
             Button("Retry", action: {
                 self.rootPresentationMode.wrappedValue.dismiss()
             })
@@ -79,16 +82,30 @@ struct UploadPictureView: View {
             do {
                 let response = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
                 
-                let success =  response?["success"] as? NSNumber
-                guard success != nil else {
+                let approved =  response?["approved"] as? NSNumber
+                let statusCode =  response?["statusCode"] as? NSNumber
+                var statusMessage =  response?["message"] as? String
+                
+                guard approved != nil else {
                     self.status = .rejected
                     return
                 }
-                if(success == 1){
+                if(approved == 1){
                     self.status = .approved
+                    if statusMessage == nil{
+                        statusMessage = "Your image has been approved"
+                    }
+                    self.statusMessage = statusMessage
+                    self.statusCode = statusCode
+                    
                     print("Successfull request!")
                 }else {
                     self.status = .rejected
+                    if statusMessage == nil {
+                        statusMessage = "Uknown error occured."
+                    }
+                    self.statusMessage = statusMessage
+                    self.statusCode = statusCode
                 }
             }catch{
                 print(error)

@@ -31,6 +31,7 @@ struct TakePictureView: View {
             VStack{
                 
                 VideoView(parentViewModel: viewModel)
+                    .padding(.top, 10)
                 
                 Button("Photo"){
                     // When we have taken a picutre, view the picture
