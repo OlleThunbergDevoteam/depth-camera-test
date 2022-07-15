@@ -36,7 +36,8 @@ struct ConfirmPictureView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }).buttonStyle(ButtonStyleDefault())
         }else {
-            ProgressView().progressViewStyle(CircularProgressViewStyle())
+            CustomSpinner()
+            
         }
     }
     init(photo: Binding<AVCapturePhoto?>){
