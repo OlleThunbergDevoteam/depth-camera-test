@@ -27,24 +27,21 @@ struct UploadPictureView: View {
         self._photo = _photo
     }
     var body: some View{
-        
         if status == .uploading {
+            CustomSpinner()
             Text("Please wait while the image is being approved").onAppear{
                 // Upload the photo
                 print("uploading photo")
                 
                 uploadPhoto(photo: $photo.wrappedValue!)
             }
-        }else if status == .approved {
-            Text(statusMessage ?? "Your image has been approved")
-            Button("Close", action: {
+        }else {
+            Image(status == .rejected ? "Rejected" : "Approved").resizable().frame(width: status == .rejected ? 58 : 60, height: status == .rejected ? 58 : 44.65).padding(.bottom,73.35)
+            Text(statusMessage ?? (status == .rejected ? "Please retake the image" : "Thank you for your participation") ).bold().bold().padding(.bottom, 4)
+            Text((status == .rejected ? "Need help? Go back to the user guide":"Your image has been approved")).padding(.bottom, 23)
+            Button(status == .rejected ? "Retry" : "Close", action: {
                 self.rootPresentationMode.wrappedValue.dismiss()
-            })
-        }else if status == .rejected {
-            Text(statusMessage ?? "Please retake the image")
-            Button("Retry", action: {
-                self.rootPresentationMode.wrappedValue.dismiss()
-            })
+            }).buttonStyle(ButtonStyleDefault())
             
         }
         
@@ -84,7 +81,7 @@ struct UploadPictureView: View {
                 
                 let approved =  response?["approved"] as? NSNumber
                 let statusCode =  response?["statusCode"] as? NSNumber
-                var statusMessage =  response?["message"] as? String
+                var statusMessage =  response?["statusMessage"] as? String
                 
                 guard approved != nil else {
                     self.status = .rejected
@@ -109,6 +106,9 @@ struct UploadPictureView: View {
                 }
             }catch{
                 print(error)
+                self.statusCode = 408
+                self.statusMessage = "The requests was timed out."
+                self.status = .rejected
             }
         }
         
