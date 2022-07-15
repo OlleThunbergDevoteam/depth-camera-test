@@ -26,6 +26,7 @@ struct TakePictureView: View {
     }
     var body: some View{
         NavigationView{
+            
             VStack{
                 
                 VideoView(parentViewModel: viewModel)
@@ -60,6 +61,7 @@ struct TakePictureView: View {
         /*NavigationLink(destination: ConfirmPictureView($model.takenPhoto).navigationBarBackButtonHidden(true), isActive: $isShowingConfirmPhotoView ){
             EmptyView()
         }*/
+    
     }
 }
 
