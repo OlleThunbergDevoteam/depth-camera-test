@@ -13,16 +13,19 @@ struct ContentView: View {
     @StateObject private var model = ContentViewModel()
     
     @State var takenPicture: AVCapturePhoto?
-    
-    
+
     var body: some View {
-        if model.isGuideDone == false {
-            GuideView(model: model)
-        }else {
-            TakePictureView(model)
         
+        ZStack {
+            Color("backgroundColor").ignoresSafeArea()
+
+            if model.isGuideDone == true {
+                GuideView(model: model)
+            }else {
+                TakePictureView(model)
+            }
+            
         }
-       
     }
 
     

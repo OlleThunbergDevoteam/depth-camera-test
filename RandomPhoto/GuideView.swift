@@ -14,11 +14,14 @@ struct GuideView: View {
         viewModel = model
     }
     var body: some View{
-        Text("Hello world")
-        Button(action: {
-            viewModel?.isGuideDone = true
-        }, label: {
-            Text("Done")
-        })
+        VStack {
+            Text("Hello world")
+            Button(action: {
+                viewModel?.isGuideDone = true
+            }, label: {
+                Text("Done")
+            })
+        }
+
     }
 }
