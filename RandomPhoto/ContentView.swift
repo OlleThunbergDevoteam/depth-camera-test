@@ -19,7 +19,7 @@ struct ContentView: View {
         if model.isGuideDone == false {
             GuideView(model: model)
         }else {
-            TakePictureView()
+            TakePictureView(model)
         
         }
        

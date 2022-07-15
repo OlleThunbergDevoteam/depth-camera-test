@@ -14,23 +14,18 @@ struct FrameView: View {
     var body: some View {
         // 1
         if let image = image {
-          // 2
-          GeometryReader { geometry in
-            // 3
-              Image(image, scale: 0.5, orientation: .upMirrored, label: label)
-              .resizable()
-              .scaledToFill()
-              .frame(
-                width: geometry.size.width,
-                height: geometry.size.height,
-                alignment: .center)
-              .clipped()
-          }
+                
+            Image(image, scale: 0.5, orientation: .upMirrored, label: label)
+                  .resizable()
+                  .scaledToFill()
+                  .frame(width: 334, height: 547, alignment: .center)
+                  .cornerRadius(20).overlay(
+                    Image("CameraOverlay").resizable().scaledToFit().padding(.horizontal, 19).padding(.vertical, 21)
+                  )
         } else {
           // 4
           Color.black
         }
-
     }
 }
 

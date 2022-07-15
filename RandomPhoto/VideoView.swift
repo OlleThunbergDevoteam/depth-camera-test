@@ -13,7 +13,6 @@ struct VideoView: View {
     
     var body: some View {
         FrameView(image: model.frame)
-            .edgesIgnoringSafeArea(.all)
     }
     
     init(parentViewModel: TakePictureViewModel) {
