@@ -110,6 +110,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		841D426228819496004726C1 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		84EBE8B6287C2751002D369A = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +154,7 @@
 				84507719288007EB009935CF /* UploadPictureView.swift */,
 				841D425E2881893A004726C1 /* ButtonStyleDefault.swift */,
 				841D426028818B00004726C1 /* HexToColorExtension.swift */,
+				841D426228819496004726C1 /* Fonts */,
 				8450771B28800E53009935CF /* PopToRootExtension.swift */,
 				84EBE8F5287C319C002D369A /* ContentViewModel.swift */,
 				848E9030287EC85D00AD4D81 /* VideoViewModel.swift */,
