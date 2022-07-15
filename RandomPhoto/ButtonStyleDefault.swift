@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ButtonStyleDefault: ButtonStyle {
-    var color: Color = Color(hex: "EF414B")!
+    var color: Color = Color("redColor")
     
     public func makeBody(configuration: ButtonStyleDefault.Configuration) -> some View {
         

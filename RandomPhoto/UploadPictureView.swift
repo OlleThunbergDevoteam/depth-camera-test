@@ -37,7 +37,7 @@ struct UploadPictureView: View {
             }
         }else {
             Image(status == .rejected ? "Rejected" : "Approved").resizable().frame(width: status == .rejected ? 58 : 60, height: status == .rejected ? 58 : 44.65).padding(.bottom,73.35)
-            Text(statusMessage ?? (status == .rejected ? "Please retake the image" : "Thank you for your participation") ).bold().bold().padding(.bottom, 4)
+            Text(statusMessage ?? (status == .rejected ? "Please retake the image" : "Thank you for your participation") ).bold().bold().padding(.bottom, 4).multilineTextAlignment(.center)
             Text((status == .rejected ? "Need help? Go back to the user guide":"Your image has been approved")).padding(.bottom, 23)
             Button(status == .rejected ? "Retry" : "Close", action: {
                 self.rootPresentationMode.wrappedValue.dismiss()
@@ -49,6 +49,12 @@ struct UploadPictureView: View {
     
     
     func uploadPhoto(photo: AVCapturePhoto){
+        guard PhotoCaptureProcessor.isDepthDataSupported == (photo.depthData?.depthDataMap != nil) else {
+            self.status = .rejected
+            self.statusMessage = "Image does not contain depth data, try taking the photo from futher away"
+            self.statusCode = 404
+            return
+        }
         guard let url = URL(string: "http:192.168.86.19:3000/upload/photo")else{
             return
         }
