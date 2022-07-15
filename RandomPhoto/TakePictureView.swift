@@ -27,6 +27,7 @@ struct TakePictureView: View {
     var body: some View{
         NavigationView{
             VStack{
+                
                 VideoView(parentViewModel: viewModel)
                 Spacer()
                 Button{
@@ -34,8 +35,9 @@ struct TakePictureView: View {
                     CameraManager.shared.capture()
                     isActive = true
                     
+                    
                 } label: {
-                    Image("RecordButton").resizable().frame(width: 58, height: 58)
+                    Image("RecordButton").resizable().frame(width: 58, height: 58).padding(.bottom, 25)
                 }
                 .onAppear {
                     CameraManager.shared.startRunning()
@@ -43,16 +45,18 @@ struct TakePictureView: View {
                 .onDisappear {
                     CameraManager.shared.stopRunning()
                 }
+                
                 NavigationLink(destination: ConfirmPictureView(photo: $viewModel.image).navigationBarBackButtonHidden(true), isActive: $isActive ){
                     EmptyView()
                 }.isDetailLink(false)
             }
         }.environment(\.rootPresentationMode, self.$isActive).navigationBarHidden(true).overlay(
+            
             Button{
                 parrentViewModel.isGuideDone = false
             } label: {
                 Image("BackButton").resizable().frame(width: 35, height: 35).padding(22)
-            }, alignment: .topLeading)
+            }.opacity(isActive ? 0 : 1), alignment: .topLeading)
         /*NavigationLink(destination: ConfirmPictureView($model.takenPhoto).navigationBarBackButtonHidden(true), isActive: $isShowingConfirmPhotoView ){
             EmptyView()
         }*/
