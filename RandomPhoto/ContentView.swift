@@ -19,7 +19,7 @@ struct ContentView: View {
         ZStack {
             Color("backgroundColor").ignoresSafeArea()
 
-            if model.isGuideDone == true {
+            if model.isGuideDone == false {
                 GuideView(model: model)
             }else {
                 TakePictureView(model)

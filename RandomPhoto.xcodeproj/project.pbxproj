@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		841D425D28816285004726C1 /* LoadingSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D425C28816285004726C1 /* LoadingSpinner.swift */; };
 		841D425F2881893A004726C1 /* ButtonStyleDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D425E2881893A004726C1 /* ButtonStyleDefault.swift */; };
-		841D426128818B00004726C1 /* HexToColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D426028818B00004726C1 /* HexToColorExtension.swift */; };
 		8439EF8C287C37DB00E30147 /* CGImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8439EF8B287C37DB00E30147 /* CGImageExtension.swift */; };
 		8450771A288007EB009935CF /* UploadPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84507719288007EB009935CF /* UploadPictureView.swift */; };
 		8450771C28800E53009935CF /* PopToRootExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8450771B28800E53009935CF /* PopToRootExtension.swift */; };
@@ -55,7 +54,6 @@
 /* Begin PBXFileReference section */
 		841D425C28816285004726C1 /* LoadingSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSpinner.swift; sourceTree = "<group>"; };
 		841D425E2881893A004726C1 /* ButtonStyleDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyleDefault.swift; sourceTree = "<group>"; };
-		841D426028818B00004726C1 /* HexToColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexToColorExtension.swift; sourceTree = "<group>"; };
 		8439EF8B287C37DB00E30147 /* CGImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CGImageExtension.swift; path = RandomPhoto/Extensions/CGImageExtension.swift; sourceTree = SOURCE_ROOT; };
 		84507719288007EB009935CF /* UploadPictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPictureView.swift; sourceTree = "<group>"; };
 		8450771B28800E53009935CF /* PopToRootExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopToRootExtension.swift; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 				848E9032287EE59800AD4D81 /* ConfirmPictureView.swift */,
 				84507719288007EB009935CF /* UploadPictureView.swift */,
 				841D425E2881893A004726C1 /* ButtonStyleDefault.swift */,
-				841D426028818B00004726C1 /* HexToColorExtension.swift */,
 				841D426228819496004726C1 /* Fonts */,
 				8450771B28800E53009935CF /* PopToRootExtension.swift */,
 				84EBE8F5287C319C002D369A /* ContentViewModel.swift */,
@@ -339,7 +336,6 @@
 				841D425D28816285004726C1 /* LoadingSpinner.swift in Sources */,
 				841D425F2881893A004726C1 /* ButtonStyleDefault.swift in Sources */,
 				84EBE8F1287C2E58002D369A /* CameraManager.swift in Sources */,
-				841D426128818B00004726C1 /* HexToColorExtension.swift in Sources */,
 				848E9033287EE59800AD4D81 /* ConfirmPictureView.swift in Sources */,
 				84EBE8C3287C2751002D369A /* RandomPhotoApp.swift in Sources */,
 				84EBE8F8287C36B7002D369A /* CameraError.swift in Sources */,
@@ -503,7 +499,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"RandomPhoto/Preview Content\"";
-				DEVELOPMENT_TEAM = RV6WK4S72A;
+				DEVELOPMENT_TEAM = 5WW286QMQ6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RandomPhoto/Info.plist;
@@ -518,7 +514,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.andreaspandzic.RandomPhoto;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ollethunberg.RandomPhoto;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
